@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void displayFileContent(const char *filename) {
+    FILE *file = fopen(filename, "r");
+
+    char line[256];
+    printf("The contents of the filel: '%s':\n", filename);
+    while (fgets(line, sizeof(line), file)) {
+        printf("%s", line);
+    }
+    fclose(file);
+}
+
+int main() {
+    const char *filename = "task7/checktask7.txt"; 
+    char newLine[256]; 
+
+    printf("The contents of the file before the changes:\n");
+    displayFileContent(filename);
+
+    printf("Enter the line you want to add to the file: ");
+    scanf(" %[^\n]", newLine); 
+  
+    FILE *file = fopen(filename, "a"); 
+
+    fprintf(file, "%s\n", newLine); 
+    fclose(file); 
+
+    printf("\nThe contents of the with the entered sentence:\n");
+    displayFileContent(filename);
+
+    return 0;
