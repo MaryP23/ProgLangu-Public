@@ -11,6 +11,8 @@ void copy_first_three_lines(const char *input_filename, const char *output_filen
         fputs(line, output_file); // запись строки
         line_count++;
     }
+     fclose(input_file);
+     fclose(output_file);
 }
 
 void print_file_contents(const char *filename) { 
