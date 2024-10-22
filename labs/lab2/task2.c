@@ -18,7 +18,7 @@ void writeArrayInReverseToFile(const char *filename, int arr[], int size) {
         return;
     }
     for (int i = size - 1; i >= 0; i--) {
-        fprintf(file, "%dn", arr[i]); 
+        fprintf(file, "%d\n", arr[i]); 
     }
     fclose(file);
 }
@@ -30,14 +30,14 @@ int main() {
     generateRandomArray(arr, ARRAY_SIZE); 
 
     // Вывод массива в терминал
-    printf("The array of random numbers is:n");
+    printf("The array of random numbers is:\n");
     for (int i = 0; i < ARRAY_SIZE; i++) {
         printf("%d ", arr[i]);
     }
     printf("n");
 
     writeArrayInReverseToFile("random_numbers.txt", arr, ARRAY_SIZE);
-    printf("The array of random numbers is written in reverse order in the file random_numbers.txt.n");
+    printf("The array of random numbers is written in reverse order in the file random_numbers.txt.\n");
 
     return 0;
 }
