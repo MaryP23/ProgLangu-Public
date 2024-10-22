@@ -5,19 +5,19 @@
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        printf("The size of the array is not enteredn");
+        printf("The size of the array is not entered\n");
         return 1; // Завершаем программу с кодом ошибки
     }
 
     int size = atoi(argv[1]); 
     if (size <= 0) {
-        printf("Invalid size of the arrayn");
+        printf("Invalid size of the array\n");
         return 1; // Завершаем программу с кодом ошибки
     }
 
     float *randomFloats = malloc(size * sizeof(float)); 
     if (randomFloats == NULL) {
-        printf("Memory allocation failedn");
+        printf("Memory allocation failed\n");
         return 1; // Завершаем программу с кодом ошибки
     }
 
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         randomFloats[i] = (float)rand() / RAND_MAX; 
     }
 
-    printf("Random numbers:n");
+    printf("Random numbers:\n");
     for (int i = 0; i < size; i++) {
         printf("%fn", randomFloats[i]); 
     }
