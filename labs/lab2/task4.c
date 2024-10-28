@@ -1,13 +1,13 @@
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <time.h> 
-//*Написать программу, которая в качестве аргумента принимает размер произвольного массива, создает его, заполняет случайными числами с плавающей 
-//точкой в интервале (arg1, arg2), где arg1 и arg2 
-//- также аргументы, вводимые при запуске программы, и выводит массив в консоль. Далее программа записывает массив в файл в отсортированном виде.
-int compare(const void *a, const void *b) {
-    float num1 = *(const float *)a;
+/*Написать программу, которая в качестве аргумента принимает размер произвольного массива, создает его, заполняет случайными числами с плавающей 
+точкой в интервале (arg1, arg2), где arg1 и arg2 
+- также аргументы, вводимые при запуске программы, и выводит массив в консоль. Далее программа записывает массив в файл в отсортированном виде.*/
+int compare(const void *a, const void *b) {// функция для сортировки, принимающая два элемента массива (границы) //
+    float num1 = *(const float *)a;// преобразует в float и заменяет имя элем на num1, мы указываем на элем а, не имеющий типа
     float num2 = *(const float *)b; 
-    return (num1 > num2) - (num1 < num2);
+    return (num1 > num2) - (num1 < num2);// если равенство в скобке выполняется, то возвращается 0, таким образом мы сравниваем элем-ы //
 }
 
 float* createRandomArray(int size, float arg1, float arg2) {  
@@ -24,7 +24,7 @@ float* createRandomArray(int size, float arg1, float arg2) {
     return array; 
 }
 
-void writeArrayToFile(const char *filename, float *array, int size) {
+void writeArrayToFile(const char *filename, float *array, int size) {// функция для записи массива в файл, принимает имя файла, массив и его размер //
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
         fprintf(stderr, "Could not open file for writing");
@@ -41,7 +41,7 @@ void writeArrayToFile(const char *filename, float *array, int size) {
 }
 
 int main(int argc, char *argv[]) { 
-    if (argc != 4) {
+    if (argc != 4) {// название программы
         fprintf(stderr, "Usage: %s <size> <arg1> <arg2>", argv[0]);
      printf("\n");
         return 1;
