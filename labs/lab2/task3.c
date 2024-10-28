@@ -16,7 +16,9 @@ int main(int argc, char *argv[]) {
         return 1; 
     }
 
-    float *randomFloats = malloc(size * sizeof(float)); 
+    float *randomFloats = malloc(size * sizeof(float));/*sizeof(float) возвращает
+    размер одного элемента типа float в байтах. В итоге
+    эта строка создает массив из size элементов типа float */
     if (randomFloats == NULL) {
         printf("Memory allocation failed");
      printf("\n");
@@ -34,6 +36,7 @@ int main(int argc, char *argv[]) {
         printf("%f\n", randomFloats[i]); 
     }
 
-    free(randomFloats); 
+    free(randomFloats); /* освобождение выделенной памяти ( Если вы не освободите память, это приведет к утечке памяти (memory leak), что означает, 
+    что программа использует больше памяти, чем необходимо, и эта память не может быть повторно использована до завершения программы.) */
     return 0;
 }
