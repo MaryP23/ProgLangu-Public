@@ -14,7 +14,7 @@ typedef struct {
 void readProducts(const char *filename, Product products[], int *count) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        perror("Ошибка открытия файла");
+        perror("File opening error");
         exit(EXIT_FAILURE);
     }
     
@@ -45,7 +45,7 @@ int compareProducts(const void *a, const void *b) {
 void writeProducts(const char *filename, Product products[], int count) {
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
-        perror("Ошибка открытия файла");
+        perror("File opening error");
         exit(EXIT_FAILURE);
     }
     
