@@ -64,7 +64,7 @@ int evaluatePostfix(const char *expression) {
 // если символ - цифра, преобразуем в число и помещаем в стек
             push(&stack, *p - '0');
 // вычитание ASCII-кода символа '0' из ASCII-кода текущего символа (преобразование)
-        } else if (*p == '+'  *p == '-'  *p == '*' || *p == '/') {
+        } else if (*p == '+' || *p == '-' || *p == '*' || *p == '/') {
 // если символ - оператор, извлекаем два значения из стека
             int right = pop(&stack); // извлечение
             int left = pop(&stack); 
@@ -98,7 +98,10 @@ int evaluatePostfix(const char *expression) {
 
 int main() {
     FILE *file = fopen("input1.txt", "r");
-
+ if (file == NULL) {
+        printf("Error: Could not open file\n");
+        return EXIT_FAILURE;
+ }
     char expression[MAX_SIZE];
 // создание массива для хранения выражения
     fgets(expression, sizeof(expression), file);
@@ -106,8 +109,10 @@ int main() {
     fclose(file);
 
     int result = evaluatePostfix(expression);
-// вызов функции
-    printf("Result: %dn", result);
+// вызод функции
+     if (result != -1) {
+        printf("Result: %d\n", result);
+    }
 
     return EXIT_SUCCESS; // успешное завершение программы
 }
