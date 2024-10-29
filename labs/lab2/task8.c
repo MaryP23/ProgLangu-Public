@@ -8,15 +8,16 @@ typedef struct stack {
     int top;      
 } stack;
 
-void zad(stack* s) {
+void zad(stack* s) {/*Инициализирует стек, устанавливая top в -1, что указывает на то, что стек пуст.*/
     s->top = -1; 
 }
 
-bool pust(stack* s) {
+bool pust(stack* s) { /*Если стек полон, выводит сообщение об ошибке и возвращает false.
+Если добавление успешно, увеличивает top на 1 и помещает sch в стек, возвращает true.*/
     return s->top == -1;
 }
 
-bool full(stack* s) {
+bool full(stack* s) {/*Возвращает true, если стек полон, и false в противном случае.*/
     return s->top == N - 1;
 }
 
@@ -25,7 +26,7 @@ bool push(stack* s, int sch) {
         printf("Error.the stack is full.\n");
         return false;
     }
-    s->arr[++(s->top)] = sch;
+    s->arr[++(s->top)] = sch;/*Если добавление успешно, увеличивает top на 1 и помещает sch в стек, возвращает true.*/
     return true;
 }
 
@@ -34,11 +35,11 @@ bool out(stack* s, int* sch) {
         printf("Error.the stack is empty.\n");
         return false;
     }
-    *sch = s->arr[(s->top)--];
+    *sch = s->arr[(s->top)--];/*Если извлечение успешно, уменьшает top на 1 и возвращает true*/
     return true;
 }
 
-bool view(stack* s, int* sch) {
+bool view(stack* s, int* sch) { /*Указатель на стек s и указатель на переменную sch, в которую будет помещено значение верхнего элемента.*/
     if (pust(s)) {
         printf("Error.The stack is empty..\n");
         return false;
