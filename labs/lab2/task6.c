@@ -1,73 +1,66 @@
+/*Написать программу, в которой реализовать набор функций по работе со стеком:
+Организовать хранение стека в памяти.
+Реализовать добавление значения в стек.
+Реализовать извлечение значения из стека.
+Реализовать просмотр верхнего значения стека.
+Учесть при работе возможность переполнения стека.
+Получить результат работы программы для нескольких (не менее двух) запусков для каждой функции в различных состояниях стека.*/
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#define N 100 
-
-typedef struct stack {
-    int arr[N]; 
-    int top;      
-} stack;
-
-void zad(stack* s) {
-    s->top = -1; 
+#include <stdbool.h> // работа с типом данных true/false
+#define MAX_SIZE 100 
+typedef struct { // определяет новую структуру данных Stack
+    int items[MAX_SIZE]; 
+    int top; // индекс верхнего элемента стека
+} Stack;
+void initStack(Stack *s) {
+    s->top = -1; // присваивание, означает, что стек пуст
 }
-
-bool pust(stack* s) {
-    return s->top == -1;
+int isStackState(Stack *s) {
+// возвращает -1, если стек имеет элементы, true, если пуст, false, если полон
+    if (s->top == -1) return true; // стек пуст
+    if (s->top == MAX_SIZE - 1) return false; // стек полон
+// MAX_SIZE - 1 - индекс последнего элемента в массиве
+    return -1; // Стек имеет элементы
 }
-
-bool full(stack* s) {
-    return s->top == N - 1;
-}
-
-bool push(stack* s, int sch) {
-    if (full(s)) {
-        printf("Error.the stack is full.\n");
+bool push(Stack *s, int value) { // добавление элемента в стек
+    if (!isStackState(s)) { // Проверяем, полон ли стек
+        printf("The stack is full. It is not possible to add an element %d.\n", value);
+// value — это значение, которое мы пытаемся добавить в стек
         return false;
     }
-    s->arr[++(s->top)] = sch;
+    s->items[++(s->top)] = value; /*добавляем элемент в стек
+ увеличиваем значение top на 1, указывая на след элемент
+присваиваем значение переменной value этому индексу
+таким образом происходит добавление*/
     return true;
 }
-
-bool out(stack* s, int* sch) {
-    if (pust(s)) {
-        printf("Error.the stack is empty.\n");
-        return false;
+int pop(Stack *s) { // удаление элемента из стека
+    if (isStackState(s) == true) { // проверяем, пуст ли стек
+        printf("The stack is empty. The item cannot be deleted.\n");
+        return -1; // можно использовать другое значение для обозначения ошибки
     }
-    *sch = s->arr[(s->top)--];
-    return true;
-}
-
-bool view(stack* s, int* sch) {
-    if (pust(s)) {
-        printf("Error.The stack is empty..\n");
-        return false;
+    return s->items[(s->top)--]; /*возвращаем верхний элемент и уменьшаем top
+обращается к массиву items по индексу, который был ранее задан значением top
+сначала получаем значение top, затем уменьшаем его на 1
+получаем текущий верхний элемент стека, а затем уменьшаем индекс верхнего элемента*/
+} 
+int peek(Stack *s) { // получение верхнего элемента стека без удаления
+    if (isStackState(s) == true) { // проверяем, пуст ли стек
+        printf("The stack is empty. It is impossible to get the top element.\n");
+        return -1; // или другое значение для обозначения ошибки
     }
-    *sch = s->arr[s->top];
-    return true;
+    return s->items[s->top]; // возвращаем верхний элемент
 }
-
 int main() {
-    stack s;
-    zad(&s); 
-
-    push(&s, 15);
-
-    int sch;
-
-    if (view(&s, &sch)) {
-        printf("the top value of the stack. %d\n", sch);
-    }
-
-    while (out(&s, &sch)) {
-        printf("Extracing from the stack: %d\n", sch);
-    }
-
-    for (int i = 0; i < 105; ++i) {
-        if (!push(&s, i)) {
-            break;
-        }
-    }
-
+    Stack stack; // объявляет переменную stack типа Stack
+    initStack(&stack); // инициализирует стек, передавая адрес переменной stack
+    push(&stack, 40); // добавление элемента стека
+    push(&stack, 70);
+    printf("Верхний элемент: %d\n", peek(&stack));
+    printf("Удаленный элемент: %d\n", pop(&stack));
+    printf("Удаленный элемент: %d\n", pop(&stack));
+    pop(&stack); // попытка удалить из пустого стека
+    return 0;
+}
     return 0;
 }
