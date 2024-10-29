@@ -1,92 +1,113 @@
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#define n 128
+#include <ctype.h> // работа с символами и цифрами
+/*Написать программу, вычисляющую значение выражения, записанного в постфиксной (обратной польской) записи, 
+считываемого из входного файла. Считать, что выражение может содержать только цифры и знаки «+», «-», «*» и «/».*/
+#define MAX_SIZE 100
 
-typedef struct {
-    int data[n];
-    int top;
+typedef struct { // typedef создание нов типа данных
+// struct пользовательский тип данных
+    int items[MAX_SIZE]; // элементы стека
+    int top; // индекс верхнего элем стека
 } Stack;
 
-void full(Stack *stack, int value) {
-    if (stack->top == n - 1) {
-        printf("Ошибка: стек переполнен\n");
-        exit(1);
-    }
-    stack->data[++stack->top] = value;
+void initStack(Stack *s) { // инициализация стека
+    s->top = -1;
+    // устанавливает значение, означающее, что стек пуст
 }
 
-int pust(Stack *stack) {
-    if (stack->top == -1) {
-        printf("Ошибка: стек пуст\n");
-        exit(1);
-    }
-    return stack->data[stack->top--];
+int isFull(Stack *s) { // проверяет, полон ли стек
+    return s->top == MAX_SIZE - 1;
+// если индекс верхнего элемента соотв макс размеру
+// то стек полон, иначе возвращает 0
 }
 
-int perevod(const char *str) {
-    Stack stack;
-    stack.top = -1;
+int isEmpty(Stack *s) { // проверяет, пуст ли стек
+    return s->top == -1; // булевой
+}
 
-    for (int i = 0; str[i] != '\0'; i++) {
-        char ch = str[i];
-        if (ch == ' ') {
-            continue;
-        }
+void push(Stack *s, int value) {
+// добавление элемента в стек
+// принимает указатель на стек и значение, которое добавить
+    if (!isFull(s)) { // если стек не полон, то...
+        s->items[++(s->top)] = value;
+/* Сначала увеличивается значение top на 1,
+а затем используется этот новый индекс для
+доступа к массиву items. Элемент будет помещён
+в следующую доступную позицию стека */
+    }
+}
 
-        if (isdigit(ch)) {
-            int sch = 0;
-            while (isdigit(str[i])) {
-                sch = sch * 10 + (str[i] - '0');
-                i++;
-            }
-            i--;
-            full(&stack, sch);
-        }
-        else if (ch == '+'  ch == '*' || ch == '/') {
-            int z2 = pust(&stack);
-            int z1 = pust(&stack);
+int pop(Stack *s) {
+// удаляет элемент из стека и возвращ его знач
+    if (!isEmpty(s)) { // если стек не пуст, то...
+        return s->items[(s->top)--];
+/* Сначала берётся текущее значение top, для получения
+элемента из массива items. Затем значение top уменьшается
+на 1. Мы извлекаем верхний элемент стека и сразу же 
+указываем, что теперь верхний элемент находится ниже. */
+    }
+    return -1; // возвращаем -1, если стек пуст
+}
+
+int evaluatePostfix(const char *expression) {
+// принимает строку (выражение)
+    Stack stack; // локальная переменная стека
+// хранение состояния стека
+    initStack(&stack); // инициализация пустого стека
+    
+    const char *p = expression; // указатель для итерации
+// expression - строка
+
+    while (*p) {
+        if (isdigit(*p)) {
+// если символ - цифра, преобразуем в число и помещаем в стек
+            push(&stack, *p - '0');
+// вычитание ASCII-кода символа '0' из ASCII-кода текущего символа (преобразование)
+        } else if (*p == '+'  *p == '-'  *p == '*' || *p == '/') {
+// если символ - оператор, извлекаем два значения из стека
+            int right = pop(&stack); // извлечение
+            int left = pop(&stack); 
             int result;
 
-            switch (ch) {
-                case '+': 
-                result = z1 + z2; 
-                break;
-                case '-': 
-                result = z1 - z2; 
-                break;
-                case '*': 
-                result = z1 * z2; 
-                break;
-                case '/': 
-                    if (z2 == 0) {
-                        printf("Ошибка: деление на ноль\n");
-                        exit(1);
-                    }
-                    result = z1 / z2; 
+            switch (*p) {
+                case '+':
+                    result = left + right;
                     break;
-                default:
-                    printf("Ошибка: неизвестный оператор '%c'\n", ch);
-                    exit(1);
+                case '-':
+                    result = left - right;
+                    break;
+                case '*':
+                    result = left * right;
+                    break;
+                case '/':
+                    result = left / right;
+// предполагается, что деление на ноль не произойдет
+                    break;
             }
-            full(&stack, result);
-        } else {
-            printf("Ошибка: недопустимый символ '%c'\n", ch);
-            exit(1);
+            // помещаем результат обратно в стек
+            push(&stack, result);
         }
+        p++;
     }
-    return pust(&stack);
+
+    // в конце в стеке должно остаться одно значение - результат
+    return pop(&stack); // возвращает верхний элемент стека
+// как результат выполнения функции evaluatePostfix
 }
 
 int main() {
-    FILE *file = fopen("input.txt", "r");
+    FILE *file = fopen("input1.txt", "r");
 
-    char str[128];
-    while (fgets(str, sizeof(str), file)) {
-        int result = perevod(str);
-        printf("Результат: %d\n", result);
-    }
+    char expression[MAX_SIZE];
+// создание массива для хранения выражения
+    fgets(expression, sizeof(expression), file);
+// считывание строки из файла и помещение в массив
     fclose(file);
-    return 0;
+
+    int result = evaluatePostfix(expression);
+// вызов функции
+    printf("Result: %dn", result);
+
+    return EXIT_SUCCESS; // успешное завершение программы
 }
