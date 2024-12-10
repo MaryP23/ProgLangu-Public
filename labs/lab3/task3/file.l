@@ -3,18 +3,20 @@
 	#include <stdio.h>
 	#include <string.h>
 	#include <stdlib.h>
-	#include "lab3task3.tab.h"
+	#include "task3.tab.h"
 //extern YYSTYPE yylval;
 %}
 %%
 [0-9]+ {yylval= atoi(yytext); return NUMBER;}
 "+"    {return PLUS;}
 "-"    {return MINUS;} 
-"*"    {return MULTYPLY;} 
-"/"    {return DIVISION;} 
+"*"    {return MUL;} 
+"/"    {return DIV;} 
 "("    {return OPEN;} 
+"\n"   {return END;} 
 ")"    {return CLOSE;} 
 .      {printf("Error:\n");}
 %%
 int yywrap() {
+    return 1;
 }
